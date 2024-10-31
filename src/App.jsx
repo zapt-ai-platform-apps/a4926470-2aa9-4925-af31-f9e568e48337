@@ -1,4 +1,4 @@
-import { createSignal, onMount, Show, For, createEffect } from 'solid-js';
+import { createSignal, onMount, Show, For } from 'solid-js';
 import { supabase } from './supabaseClient';
 import { Auth } from '@supabase/auth-ui-solid';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
@@ -14,37 +14,8 @@ function App() {
     if (user) {
       setUser(user);
       setCurrentPage('homePage');
-    }
-  };
-
-  onMount(() => {
-    checkUserSignedIn();
-    if (user()) {
       fetchShows();
     }
-  });
-
-  createEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange((_, session) => {
-      if (session?.user) {
-        setUser(session.user);
-        setCurrentPage('homePage');
-        fetchShows();
-      } else {
-        setUser(null);
-        setCurrentPage('login');
-      }
-    });
-
-    return () => {
-      authListener.unsubscribe();
-    };
-  });
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setCurrentPage('login');
   };
 
   const fetchShows = async () => {
@@ -63,6 +34,30 @@ function App() {
     } finally {
       setLoading(false);
     }
+  };
+
+  onMount(() => {
+    checkUserSignedIn();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      if (session?.user) {
+        setUser(session.user);
+        setCurrentPage('homePage');
+        fetchShows();
+      } else {
+        setUser(null);
+        setCurrentPage('login');
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  });
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    setCurrentPage('login');
   };
 
   return (
