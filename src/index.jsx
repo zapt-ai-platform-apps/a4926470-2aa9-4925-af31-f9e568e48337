@@ -6,12 +6,11 @@ import * as Sentry from '@sentry/browser';
 Sentry.init({
   dsn: import.meta.env.VITE_PUBLIC_SENTRY_DSN,
   environment: import.meta.env.VITE_PUBLIC_APP_ENV,
-  initialScope: {
-    tags: {
-      type: 'frontend',
-      projectId: import.meta.env.VITE_PUBLIC_APP_ID
-    }
-  }
+});
+
+Sentry.configureScope((scope) => {
+  scope.setTag('type', 'frontend');
+  scope.setTag('projectId', import.meta.env.VITE_PUBLIC_APP_ID);
 });
 
 // Add PWA support to the app (this will add a service worker and a manifest file, you don't need to do anything else)
