@@ -11,9 +11,9 @@
   "dependencies": {
     "solid-js": "^1.8.22",
     "@supabase/auth-ui-shared": "^0.1.8",
-    "@supabase/auth-ui-solid": "^0.3.8",
+    "@supabase/auth-ui-solid": "^0.3.14",
     "@zapt/zapt-js": "^1.0.5",
-    "@sentry/browser": "^8.35.0",
+    "@sentry/browser": "^7.62.0",
     "solid-markdown": "^2.0.13"
   },
   "devDependencies": {

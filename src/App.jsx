@@ -1,4 +1,4 @@
-import { createSignal, onMount, Show, For } from 'solid-js';
+import { createSignal, onMount, Show, For, onCleanup } from 'solid-js';
 import { supabase } from './supabaseClient';
 import { Auth } from '@supabase/auth-ui-solid';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
@@ -49,9 +49,9 @@ function App() {
       }
     });
 
-    return () => {
+    onCleanup(() => {
       subscription.unsubscribe();
-    };
+    });
   });
 
   const handleSignOut = async () => {
